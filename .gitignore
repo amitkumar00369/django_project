@@ -1,0 +1,8 @@
+/app2/migrations
+/app2/__pycache__
+/app1/migrations
+/app1/__pycache__
+/p1/__pycache__
+db.sqlite3
+
+/env
