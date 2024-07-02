@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "app1",
     'corsheaders',
-    "app2",
+    # "app2",
 ]
 
 MIDDLEWARE = [
@@ -133,10 +133,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 JWT_SECRET_KEY='ilu123'
 
-from mongoengine import connect
+# from mongoengine import connect
 
-# Connect to MongoDB
-connect(
-    db='Django_project',
-    host='mongodb://localhost:27017/Django_project'
-)
+# # Connect to MongoDB
+# connect(
+#     db='Django_project',
+#     host='mongodb://localhost:27017/Django_project'
+# )
