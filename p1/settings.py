@@ -154,11 +154,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 JWT_SECRET_KEY='ilu123'
 
-from mongoengine import connect
+# from mongoengine import connect
 
-# Connect to MongoDB
-connect(
-    db='Django_project',
-    # host='mongodb://localhost:27017/Django_project'
-    host='mongodb+srv://amit20106107904:Amit1234@cluster0.nsa5voc.mongodb.net/Cluster0?retryWrites=true&w=majority&appName=Cluster0'
-)
+# # Connect to MongoDB
+# connect(
+#     db='Django_project',
+#     # host='mongodb://localhost:27017/Django_project'
+#     host='mongodb+srv://amit20106107904:Amit1234@cluster0.nsa5voc.mongodb.net/Cluster0?retryWrites=true&w=majority&appName=Cluster0'
+# )
