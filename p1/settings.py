@@ -156,7 +156,6 @@ JWT_SECRET_KEY='ilu123'
 
 # from mongoengine import connect
 
-# # Connect to MongoDB
 # connect(
 #     db='Django_project',
 #     # host='mongodb://localhost:27017/Django_project'
