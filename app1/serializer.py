@@ -5,4 +5,4 @@ class studentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model=StudentModel
-        fields=['id','name','email','mobileNo','password','countryName','countryCode']
+        fields=['id','name','email','mobileNo','password','countryName','countryCode','deviceType','ipAdress']

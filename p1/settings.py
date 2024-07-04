@@ -24,9 +24,17 @@ SECRET_KEY = "django-insecure-dw@7!0s++9ua9@590&4v@&$(+phevu6m%cddputo4tzyjv*g@v
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+SECURE_SSL_REDIRECT = False
+
 
 ALLOWED_HOSTS = []
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Adjust this to your frontend URL
+    "http://127.0.0.1:3000",   # If you are running frontend and backend locally
+    "http://yourdomain.com",   # Add your domain here in production
+]
+
 
 # CORS_ALLOWED_ORIGINS = [
 #     "http://example.com",
@@ -44,7 +52,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "app1",
     'corsheaders',
-    # "app2",
+    "app2",
 ]
 
 MIDDLEWARE = [
@@ -56,7 +64,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
 ]
+
 
 ROOT_URLCONF = "p1.urls"
 
@@ -82,12 +92,23 @@ WSGI_APPLICATION = "p1.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Local_DB',
+        'USER': 'postgres',
+        'PASSWORD': 'Anshu',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation
@@ -133,10 +154,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 JWT_SECRET_KEY='ilu123'
 
-# from mongoengine import connect
+from mongoengine import connect
 
-# # Connect to MongoDB
-# connect(
-#     db='Django_project',
-#     host='mongodb://localhost:27017/Django_project'
-# )
+# Connect to MongoDB
+connect(
+    db='Django_project',
+    # host='mongodb://localhost:27017/Django_project'
+    host='mongodb+srv://amit20106107904:Amit1234@cluster0.nsa5voc.mongodb.net/Cluster0?retryWrites=true&w=majority&appName=Cluster0'
+)
