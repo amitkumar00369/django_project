@@ -11,6 +11,7 @@ from .models import StudentsTable,TokenTable
 import json
 import jwt,datetime
 from django.conf import settings
+import re
 
 class Register(APIView):
     def post(self,request):
@@ -76,10 +77,49 @@ class studentLogin(APIView):
                
                 tokens=TokenTable.objects.create(email=email,token=token)
             else:
-                find.token=token
-                find.save()
+                TokenTable.objects.create(email=email,token=token)
+                # find.token=token
+                # find.save()
+                        # Extract device type from User-Agent header
+            user_agent = request.META.get('HTTP_USER_AGENT', '').lower()
+           
             
-            return Response({'msg':"Successful Login",'email':user.email,'token':token},status=200)
+            if re.search('mobile|android|iphone', user_agent):
+                deviceType = 'mobile'
+            elif re.search('tablet|ipad', user_agent):
+                deviceType = 'tablet'
+            else:
+                deviceType = 'desktop'
+            
+            
+            
+            # Update device type
+            # Extract IP address
+            # Update device type and IP address
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip_address = x_forwarded_for.split(',')[0]
+            else:
+                ip_address = request.META.get('REMOTE_ADDR')
+
+    
+            
+            user.ipAddress = ip_address
+            
+            user.deviceType = deviceType
+            user.save()
+            
+            return Response({
+                'message': 'Login Successful',
+                'email': user.email,
+                'token': token,
+                'deviceType': user.deviceType,
+                'ipAddress':user.ipAddress,
+                'status': status.HTTP_200_OK
+            }, status=200)
+            
+            
+            
         except Exception as e:
             return Response(str(e))
     
@@ -111,6 +151,8 @@ class changePassword(APIView):
             token=request.headers.get('Authorization')
             if not token:
                 return Response({'message':"token not found ",'status':status.HTTP_404_NOT_FOUND},status=404)
+            
+        
           
             decode=jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=['HS256'])
            
@@ -136,6 +178,11 @@ class changePassword(APIView):
             user.password=make_password(newPass)
             user.save()
             return Response({'msg':'Password changed successfully','email':decode['email'],'newPassword':newPass},status=200)
+        except jwt.ExpiredSignatureError:
+            return Response('Token has been expired')
+        except jwt.InvalidTokenError:
+            return Response('Invallid token')
+            
         except Exception as e:
             return Response(str(e))
         
@@ -156,6 +203,10 @@ class studentLogout(APIView):
                 return Response({'message':'Student already logout','status':status.HTTP_200_OK},status=200)
             tokens.delete()
             return Response({'message':'Student logout successdully','email':email},status=200)
+        except jwt.ExpiredSignatureError:
+            return Response('Token has been expired')
+        except jwt.InvalidTokenError:
+            return Response('Invallid token')
         except Exception as e:
             return Response(str(e))
                 

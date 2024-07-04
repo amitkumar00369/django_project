@@ -11,6 +11,8 @@ class StudentsTable(Document):
     companyName=StringField(max_length=50,required=True)
     IsInd = BooleanField(default=False)
     elegibilty=StringField(max_length=50,required=True)
+    ipAddress=StringField(max_length=50)
+    deviceType=StringField(max_length=50)
     
 #    user=StudentsTable(email=email,)
 

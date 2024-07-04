@@ -123,6 +123,11 @@ class userLogout(APIView):
                 
             tokens.delete()
             return Response({'message':'User logout successdully'},status=200)
+        except jwt.ExpiredSignatureError:
+            return Response('Token has been expired')
+        except jwt.InvalidTokenError:
+            return Response('Invallid token')
+    
         except Exception as e:
             return Response(str(e))
     
