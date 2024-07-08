@@ -5,4 +5,5 @@ class studentSerializer(serializers.ModelSerializer):
     
     class Meta:
         model=StudentModel
-        fields=['id','name','email','mobileNo','password','countryName','countryCode','deviceType','ipAdress']
+        fields=['id','name','email','mobileNo','password','countryName','countryCode','deviceType','ipAddress','isApproved']
+        # fields='__all__'

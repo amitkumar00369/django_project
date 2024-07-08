@@ -12,12 +12,17 @@ class StudentModel(models.Model):
     countryCode = models.CharField(max_length=3)
     countryName = models.CharField(max_length=50)
     deviceType = models.CharField(max_length=50, blank=True, null=True)
-    ipAddress = models.GenericIPAddressField(blank=True, null=True)
+    ipAddress = models.GenericIPAddressField(null=True,blank=True)
+    isApproved=models.BooleanField(default=False,blank=True)
     
     def save(self, *args, **kwargs):
         # Hash the password before saving
-        self.password = make_password(self.password)
-        # super().save(*args, **kwargs)
+        user=StudentModel.objects.filter(email=self.email)
+        if not user:
+            
+            self.password = make_password(self.password)
+        
+        super().save(*args, **kwargs)
 
     
 class tokenModel(models.Model):

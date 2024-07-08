@@ -15,8 +15,12 @@ class userSingUp(APIView):
     def post(self,request):
         try:
             serializer=studentSerializer(data=request.data)
+            print(serializer)
+          
             if serializer.is_valid():
-                user=serializer.save()
+                serializer.save()
+                
+              
                 return Response({'message':"Successfull",
                                  'data':serializer.data,
                                  'status':200
@@ -130,7 +134,41 @@ class userLogout(APIView):
     
         except Exception as e:
             return Response(str(e))
-    
+class changePassword(APIView):
+    def put(self,request):
+        try:
+            token=request.headers.get('Authorization')
+            if not token:
+                return Response({'message':'Token not found','status':status.HTTP_404_NOT_FOUND},status=404)
+            decode=jwt.decode(token,settings.JWT_SECRET_KEY,['HS256'])
+            userId=decode['id']
+            user=StudentModel.objects.filter(id=userId).first()
+            if not user:
+                return Response({'message':'User not found','status':status.HTTP_404_NOT_FOUND},status=404)
+            oldPassword=request.data.get('oldPassword')
+            newPassword=request.data.get('newPassword')
+            if not oldPassword:
+                return Response({'message':'please enter oldPassword','status':status.HTTP_400_BAD_REQUEST},status=400)
+            if not newPassword or newPassword is None:
+                return Response({'message':'please enter newPassword','status':status.HTTP_400_BAD_REQUEST},status=400)
+            if not check_password(oldPassword,user.password):
+                return Response({'message':'please enter correct oldPassword','status':status.HTTP_401_UNAUTHORIZED},status=401)
+            hashPass=make_password(newPassword)
+            user.password=hashPass
+            user.save()
+            return Response({"message":"User change password succesafully",'email':user.email,'password':newPassword,'status':status.HTTP_200_OK},status=200)
+        except jwt.ExpiredSignatureError:
+            return ('Token has Expired')
+        except jwt.InvalidTokenError:
+            return ('Invalid Token')
+        except Exception as e:
+            return Response({'message':str(e)},status=500)
+            
+        
+                
+            
+                
+        
 class getAllUser(APIView):
     def get(self,request):
         try:
@@ -164,4 +202,4 @@ class delete(APIView):
         user=StudentModel.objects.all()
         user.delete()
         return Response("success")
-        
+
